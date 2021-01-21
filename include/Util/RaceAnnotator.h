@@ -11,7 +11,7 @@
 #include "Util/BasicTypes.h"
 #include "Util/Annotator.h"
 #include <llvm/IR/Instructions.h>
-#include <llvm/Support/CallSite.h>
+#include <llvm/IR/CallSite.h>
 
 /*!
  * MTA annotation

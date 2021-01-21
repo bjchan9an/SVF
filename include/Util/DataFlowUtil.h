@@ -119,8 +119,8 @@ public:
     bool runOnLI(llvm::Function& fun) {
         releaseMemory();
         llvm::DominatorTree dt;
-	dt.DT->recalculate(fun);
-        getBase().Analyze(*(dt.DT));
+	dt.recalculate(fun);
+        analyze(dt);
         return false;
     }
 };
@@ -174,10 +174,11 @@ public:
         llvm::Function* fun = const_cast<llvm::Function*>(f);
         FunToPostDTMap::iterator it = funToPDTMap.find(fun);
         if(it==funToPDTMap.end()) {
-            llvm::PostDominatorTree* postDT = new llvm::PostDominatorTree();
+            llvm::PostDominatorTreeWrapperPass* postDT = new llvm::PostDominatorTreeWrapperPass();
             postDT->runOnFunction(*fun);
-            funToPDTMap[fun] = postDT;
-            return postDT;
+	    llvm::PostDominatorTree * PDT = &(postDT->getPostDomTree());
+            funToPDTMap[fun] = PDT;
+            return PDT;
         }
         else
             return it->second;
@@ -189,7 +190,7 @@ public:
         FunToDTMap::iterator it = funToDTMap.find(fun);
         if(it==funToDTMap.end()) {
             llvm::DominatorTree* dt = new llvm::DominatorTree();
-            dt->DT->recalculate(*fun);
+            dt->recalculate(*fun);
             funToDTMap[fun] = dt;
             return dt;
         }

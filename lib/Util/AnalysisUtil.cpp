@@ -35,11 +35,11 @@
 #include <llvm/IR/InstrTypes.h>	// for TerminatorInst
 #include <llvm/IR/IntrinsicInst.h>	// for intrinsic instruction
 //#include <llvm/Analysis/DebugInfo.h>
-#include <llvm/DebugInfo.h>
+#include <llvm/IR/DebugInfo.h>
 #include <llvm/Support/CommandLine.h>
-#include <llvm/Support/InstIterator.h>	// for inst iteration
+#include <llvm/IR/InstIterator.h>	// for inst iteration
 #include <llvm/Analysis/CFG.h>	// for CFG
-#include <llvm/Support/CFG.h>		// for CFG
+#include <llvm/IR/CFG.h>		// for CFG
 #include "Util/Conditions.h"
 #include <sys/resource.h>		/// increase stack size
 

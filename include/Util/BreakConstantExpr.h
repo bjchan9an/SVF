@@ -15,7 +15,7 @@
 #ifndef BREAKCONSTANTGEPS_H
 #define BREAKCONSTANTGEPS_H
 
-#include <llvm/Analysis/Dominators.h>
+#include <llvm/IR/Dominators.h>
 #include <llvm/IR/Module.h>
 #include <llvm/Pass.h>
 #include <llvm/Transforms/Utils/UnifyFunctionExitNodes.h>
@@ -36,7 +36,7 @@ private:
 public:
     static char ID;
     BreakConstantGEPs() : ModulePass(ID) {}
-    const char *getPassName() const {
+    llvm::StringRef getPassName() const {
         return "Remove Constant GEP Expressions";
     }
     virtual bool runOnModule (llvm::Module & M);
@@ -62,7 +62,7 @@ private:
 public:
     static char ID;
     MergeFunctionRets() : ModulePass(ID) {}
-    const char *getPassName() const {
+    llvm::StringRef getPassName() const {
         return "unify function exit into one dummy exit basic block";
     }
     virtual bool runOnModule (llvm::Module & M) {

@@ -35,7 +35,7 @@
 
 #include <llvm/ADT/STLExtras.h>
 #include <llvm/ADT/GraphTraits.h>
-#include <llvm/Support/CallSite.h>
+#include <llvm/IR/CallSite.h>
 
 #include <map>
 #include <set>

@@ -1,13 +1,12 @@
 # SVF
-* Forked from https://github.com/unsw-corg/SVF
-* Ported to work with LLVM 3.4
-* Additional changes for the KLEE/CSE project
+* Forked from https://github.com/davidtr1037/SVF
+* Ported to work with LLVM 4.0
 
 ## Build (CMake)
 ```
 git checkout master
-mkdir build
-cd build
+mkdir Release-build
+cd Release-build
 cmake \
     -DLLVM_DIR=<LLVM_BUILD_DIR>/share/llvm/cmake/ \
     -DLLVM_SRC=<LLVM_SRC_DIR> \

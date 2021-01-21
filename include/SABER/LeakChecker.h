@@ -60,16 +60,20 @@ public:
     /// Destructor
     virtual ~LeakChecker() {
     }
-
     /// We start from here
     virtual bool runOnModule(llvm::Module& module) {
+        return runOnModule(module);
+    }
+ 
+    /// We start from here
+    virtual bool runOnModule(SVFModule module) {
         /// start analysis
         analyze(module);
         return false;
     }
 
     /// Get pass name
-    virtual const char* getPassName() const {
+    virtual llvm::StringRef getPassName() const {
         return "Static Memory Leak Analysis";
     }
 

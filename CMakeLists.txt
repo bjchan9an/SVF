@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.10.2)
 
 # To support both in- and out-of-source builds,
 # we check for the presence of the add_llvm_loadable_module command.

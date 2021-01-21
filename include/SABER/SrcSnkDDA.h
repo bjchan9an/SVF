@@ -83,7 +83,7 @@ public:
     }
 
     /// Start analysis here
-    virtual void analyze(llvm::Module& module);
+    virtual void analyze(SVFModule module);
 
     /// Initialize analysis
     virtual void initialize(llvm::Module& module) {

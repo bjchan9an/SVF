@@ -30,6 +30,7 @@
 #ifndef AnalysisUtil_H_
 #define AnalysisUtil_H_
 
+#include "Util/SVFModule.h"
 #include "Util/ExtAPI.h"
 #include "Util/ThreadAPI.h"
 #include "Util/BasicTypes.h"
@@ -37,9 +38,9 @@
 #include <llvm/IR/Function.h>
 #include <llvm/IR/Module.h>
 #include <llvm/IR/Constants.h>				// constants
-#include <llvm/Support/CallSite.h>		// callsite
+#include <llvm/IR/CallSite.h>		// callsite
 #include <llvm/ADT/SparseBitVector.h>	// sparse bit vector
-#include <llvm/Analysis/Dominators.h>	// dominator tree
+#include <llvm/IR/Dominators.h>	// dominator tree
 #include <llvm/Support/Debug.h>		// debug with types
 #include <time.h>
 

@@ -29,17 +29,18 @@
 
 #include "MemoryModel/MemModel.h"
 #include "MemoryModel/LocMemModel.h"
+#include "Util/SVFModule.h"
 #include "Util/AnalysisUtil.h"
 #include "Util/CPPUtil.h"
 #include "Util/BreakConstantExpr.h"
+#include "Util/GEPTypeBridgeIterator.h" // include bridge_gep_iterator 
 #include <llvm/Transforms/Utils/UnifyFunctionExitNodes.h>
 #include <llvm/Support/raw_ostream.h>	// for output
 #include <llvm/IR/ValueSymbolTable.h>	// for valueSymbolTable
-#include <llvm/Support/InstIterator.h>	// for inst iteration
-#include <llvm/Support/CallSite.h>		//callsite
+#include <llvm/IR/InstIterator.h>	// for inst iteration
+#include <llvm/IR/CallSite.h>		//callsite
 #include <llvm/Support/CommandLine.h> // for tool output file
-#include <llvm/Support/GetElementPtrTypeIterator.h>	//for gep iterator
-#include <llvm/IR/Operator.h>
+#include <llvm/IR/GetElementPtrTypeIterator.h>	//for gep iterator
 
 using namespace llvm;
 using namespace std;
@@ -49,7 +50,6 @@ llvm::DataLayout* SymbolTableInfo::dl = NULL;
 SymbolTableInfo* SymbolTableInfo::symlnfo = NULL;
 u32_t SymbolTableInfo::maxFieldLimit = 0;
 SymID SymbolTableInfo::totalSymNum = 0;
-llvm::Module* SymbolTableInfo::mod = NULL;
 
 static cl::opt<unsigned> maxFieldNumLimit("fieldlimit",  cl::init(10000),
         cl::desc("Maximum field number for field sensitive analysis"));
@@ -141,12 +141,11 @@ void SymbolTableInfo::collectStructInfo(const StructType *sty) {
             StInfo * subStinfo = getStructInfo(et);
             u32_t nfE = subStinfo->getFlattenFieldInfoVec().size();
             //Copy ST's info, whose element 0 is the size of ST itself.
-	    bool isPartOfArray = isa<ArrayType>(et);
 	    for (u32_t j = 0; j < nfE; j++) {
                 u32_t off = nf + subStinfo->getFlattenFieldInfoVec()[j].getFlattenOffset();
                 const Type* elemTy = subStinfo->getFlattenFieldInfoVec()[j].getFlattenElemTy();
                 FieldInfo::ElemNumStridePairVec pair = subStinfo->getFlattenFieldInfoVec()[j].getElemNumStridePairVect();
-                FieldInfo field(off,elemTy,pair,isPartOfArray);
+                FieldInfo field(off,elemTy,pair);
                 stinfo->getFlattenFieldInfoVec().push_back(field);
             }
             nf += nfE;
@@ -189,7 +188,7 @@ void SymbolTableInfo::collectSimpleTypeInfo(const llvm::Type* ty)
  */
 bool SymbolTableInfo::computeGepOffset(const llvm::User *V, LocationSet& ls) {
     assert(V);
-    for (gep_type_iterator gi = gep_type_begin(*V), ge = gep_type_end(*V);
+    for (bridge_gep_iterator gi = bridge_gep_begin(*V), ge = bridge_gep_end(*V);
             gi != ge; ++gi) {
 
         // Handling array types, skipe array handling here

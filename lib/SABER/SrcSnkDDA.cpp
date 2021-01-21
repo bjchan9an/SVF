@@ -40,7 +40,7 @@ static cl::opt<bool> DumpSlice("dump-slice", cl::init(false),
 static cl::opt<unsigned> cxtLimit("cxtlimit",  cl::init(3),
                                   cl::desc("Source-Sink Analysis Contexts Limit"));
 
-void SrcSnkDDA::analyze(llvm::Module& module) {
+void SrcSnkDDA::analyze(SVFModule module) {
 
     initialize(module);
 

@@ -31,7 +31,8 @@
 #include "MemoryModel/LocMemModel.h"
 #include "Util/AnalysisUtil.h"
 
-#include <llvm/Support/GetElementPtrTypeIterator.h>	//for gep iterator
+#include <llvm/IR/GetElementPtrTypeIterator.h>	//for gep iterator
+#include "Util/GEPTypeBridgeIterator.h" // include bridge_gep_iterator 
 #include <vector>
 
 using namespace llvm;
@@ -54,7 +55,7 @@ bool LocSymTableInfo::computeGepOffset(const llvm::User *V, LocationSet& ls) {
     }
 
     index = 0;
-    for (gep_type_iterator gi = gep_type_begin(*V), ge = gep_type_end(*V);
+    for (bridge_gep_iterator gi = bridge_gep_begin(*V), ge = bridge_gep_end(*V);
             gi != ge; ++gi, ++index) {
 
         if (index <= baseIndex) {
