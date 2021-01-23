@@ -32,6 +32,7 @@
 #include "MSSA/SVFGStat.h"
 #include "Util/GraphUtil.h"
 #include "Util/AnalysisUtil.h"
+#include "Util/SVFModule.h"
 
 using namespace llvm;
 using namespace analysisUtil;
@@ -154,6 +155,7 @@ void SVFG::addSVFGNodesForTopLevelPtrs() {
     // initialize actual parameter nodes
     for(PAG::CSToArgsListMap::iterator it = pag->getCallSiteArgsMap().begin(), eit = pag->getCallSiteArgsMap().end(); it !=eit; ++it) {
         const Function* fun = getCallee(it->first);
+	fun = getDefFunForMultipleModule(fun);
         /// for external function we do not create acutalParm SVFGNode
         /// because we do not have a formal parameter to connect this actualParm
         if(isExtCall(fun))
@@ -435,7 +437,7 @@ void SVFG::connectIndirectSVFGEdges() {
  */
 void SVFG::connectFromGlobalToProgEntry()
 {
-    llvm::Module* mod = mssa->getPTA()->getPTACallGraph()->getModule();
+    llvm::Module* mod = mssa->getPTA()->getModule();
     const llvm::Function* mainFunc = analysisUtil::getProgEntryFunction(mod);
     FormalINSVFGNodeSet& formalIns = getFormalINSVFGNodes(mainFunc);
     if (formalIns.empty())

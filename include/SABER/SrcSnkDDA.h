@@ -86,8 +86,8 @@ public:
     virtual void analyze(SVFModule module);
 
     /// Initialize analysis
-    virtual void initialize(llvm::Module& module) {
-        ptaCallGraph = new PTACallGraph(&module);
+    virtual void initialize(SVFModule module) {
+        ptaCallGraph = new PTACallGraph(module);
         AndersenWaveDiff* ander = AndersenWaveDiff::createAndersenWaveDiff(module);
         svfg =  memSSA.buildSVFG(ander);
         setGraph(memSSA.getSVFG());

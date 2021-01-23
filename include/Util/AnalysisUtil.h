@@ -72,6 +72,17 @@ inline llvm::CallSite getLLVMCallSite(const llvm::Instruction* inst) {
     llvm::CallSite cs(const_cast<llvm::Instruction*>(inst));
     return cs;
 }
+
+/// Get the definition of a function across multiple modules
+inline const llvm::Function* getDefFunForMultipleModule(const llvm::Function* fun) {
+	if(fun == NULL) return NULL;
+
+    SVFModule svfModule;
+    if (fun->isDeclaration() && svfModule.hasDefinition(fun))
+        fun = svfModule.getDefinition(fun);
+    return fun;
+}
+
 /// Return callee of a callsite. Return null if this is an indirect call
 //@{
 inline const llvm::Function* getCallee(const llvm::CallSite cs) {
@@ -555,6 +566,12 @@ bool getMemoryUsageKB(u32_t* vmrss_kb, u32_t* vmsize_kb);
 /// Increase the stack size limit
 void increaseStackSize();
 
+/// Check whether a file is an LLVM IR file
+bool isIRFile(const std::string &filename);
+
+/// Parse argument for multi-module analysis
+void processArguments(int argc, char **argv, int &arg_num, char **arg_value,
+                      std::vector<std::string> &moduleNameVec);
 /*!
  * Compare two PointsTo according to their size and points-to elements.
  * 1. PointsTo with smaller size is smaller than the other;

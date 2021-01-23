@@ -38,6 +38,7 @@
 #include <llvm/Support/Debug.h>		// DEBUG TYPE
 
 class PTAType;
+class SVFModule;
 /*!
  * Inclusion-based Pointer Analysis
  */
@@ -89,7 +90,7 @@ public:
     virtual bool runOnModule(llvm::Module& module);
 
     /// Andersen analysis
-    void analyze(llvm::Module& module);
+    void analyze(SVFModule svfModule);
 
     /// Initialize analysis
     virtual inline void initialize(llvm::Module& module) {
@@ -132,7 +133,8 @@ public:
         return (pta->getAnalysisTy() == Andersen_WPA
                 || pta->getAnalysisTy() == AndersenLCD_WPA
                 || pta->getAnalysisTy() == AndersenWave_WPA
-                || pta->getAnalysisTy() == AndersenWaveDiff_WPA);
+                || pta->getAnalysisTy() == AndersenWaveDiff_WPA
+		|| pta->getAnalysisTy() == AndersenWaveDiffWithType_WPA);
     }
     //@}
 

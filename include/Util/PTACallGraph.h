@@ -43,6 +43,7 @@
 
 
 class PTACallGraphNode;
+class SVFModule;
 
 /*
  * Call Graph edge representing a calling relation between two functions
@@ -57,6 +58,8 @@ public:
     enum CEDGEK {
         CallRetEdge,TDForkEdge,TDJoinEdge,HareParForEdge
     };
+
+
 private:
     CallInstSet directCalls;
     CallInstSet indirectCalls;
@@ -180,7 +183,7 @@ public:
     typedef CallGraphEdgeSet::iterator CallGraphNodeIter;
 
 private:
-    llvm::Module* mod;
+    SVFModule svfMod;
 
     /// Indirect call map
     CallEdgeMap indirectCallMap;
@@ -207,14 +210,13 @@ private:
 
 public:
     /// Constructor
-    PTACallGraph(llvm::Module* module)
-        : mod(module), callGraphNodeNum(0), numOfResolvedIndCallEdge(0) {
-        buildCallGraph(module);
-    }
+    PTACallGraph(SVFModule svfModule);
+
     /// Destructor
     virtual ~PTACallGraph() {
         destroy();
     }
+
 
     /// Get callees from an indirect callsite
     //@{
@@ -296,8 +298,11 @@ public:
     }
     //@}
     /// Get Module
-    inline llvm::Module* getModule() {
-        return mod;
+    inline SVFModule getModule() {
+        return svfMod;
+    }
+    inline SVFModule getSVFModule() {
+        return svfMod;
     }
     /// Whether we have aleady created this call graph edge
     PTACallGraphEdge* hasGraphEdge(PTACallGraphNode* src, PTACallGraphNode* dst,PTACallGraphEdge::CEDGEK kind) const;
@@ -368,7 +373,9 @@ struct GraphTraits<Inverse<PTACallGraphNode *> > : public GraphTraits<Inverse<Ge
 };
 
 template<> struct GraphTraits<PTACallGraph*> : public GraphTraits<GenericGraph<PTACallGraphNode,PTACallGraphEdge>* > {
+    typedef PTACallGraphNode *NodeRef;
 };
+
 
 }
 
